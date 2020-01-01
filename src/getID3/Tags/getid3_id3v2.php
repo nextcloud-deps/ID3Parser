@@ -204,7 +204,6 @@ class getid3_id3v2 extends getid3_handler
 					$thisfile_id3v2['exthead']['flags']['restrictions'] = (bool) ($thisfile_id3v2['exthead']['flag_raw'] & 0x10);
 
 					if ($thisfile_id3v2['exthead']['flags']['update']) {
-						$ext_header_chunk_length = getid3_lib::BigEndian2Int(substr($framedata, $extended_header_offset, 1)); // should be 0
 						$extended_header_offset += 1;
 					}
 
@@ -216,7 +215,6 @@ class getid3_id3v2 extends getid3_handler
 					}
 
 					if ($thisfile_id3v2['exthead']['flags']['restrictions']) {
-						$ext_header_chunk_length = getid3_lib::BigEndian2Int(substr($framedata, $extended_header_offset, 1)); // should be 1
 						$extended_header_offset += 1;
 
 						// %ppqrrstt
@@ -817,7 +815,6 @@ class getid3_id3v2 extends getid3_handler
 					}
 				} elseif ((count($IPLS_parts_unsorted) % 2) == 0) {
 					$position = '';
-					$person   = '';
 					foreach ($IPLS_parts_unsorted as $key => $value) {
 						if (($key % 2) == 0) {
 							$position = $value;
@@ -825,7 +822,6 @@ class getid3_id3v2 extends getid3_handler
 							$person   = $value;
 							$IPLS_parts[] = array('position'=>$position, 'person'=>$person);
 							$position = '';
-							$person   = '';
 						}
 					}
 				} else {
@@ -901,6 +897,7 @@ class getid3_id3v2 extends getid3_handler
 			$parsedFrame['bitsforbytesdeviation']   = getid3_lib::BigEndian2Int(substr($parsedFrame['data'], 8, 1));
 			$parsedFrame['bitsformsdeviation']      = getid3_lib::BigEndian2Int(substr($parsedFrame['data'], 9, 1));
 			$parsedFrame['data'] = substr($parsedFrame['data'], 10);
+			$deviationbitstream = '';
 			while ($frame_offset < strlen($parsedFrame['data'])) {
 				$deviationbitstream .= getid3_lib::BigEndian2Bin(substr($parsedFrame['data'], $frame_offset++, 1));
 			}
@@ -969,7 +966,6 @@ class getid3_id3v2 extends getid3_handler
 			$parsedFrame['encodingid']   = $frame_textencoding;
 			$parsedFrame['encoding']     = $this->TextEncodingNameLookup($frame_textencoding);
 
-			$parsedFrame['data']         = $parsedFrame['data'];
 			$parsedFrame['language']     = $frame_language;
 			$parsedFrame['languagename'] = $this->LanguageLookup($frame_language, false);
 			$parsedFrame['description']  = $frame_description;
@@ -1212,7 +1208,6 @@ class getid3_id3v2 extends getid3_handler
 					}
 					$frame_offset += $frame_bytesvolume;
 					$parsedFrame['peakvolume']['bass'] = getid3_lib::BigEndian2Int(substr($parsedFrame['data'], $frame_offset, $frame_bytesvolume));
-					$frame_offset += $frame_bytesvolume;
 				}
 			}
 			unset($parsedFrame['data']);
@@ -1306,7 +1301,7 @@ class getid3_id3v2 extends getid3_handler
 			$parsedFrame['feedbackRR']    = ord(substr($parsedFrame['data'], $frame_offset++, 1));
 			$parsedFrame['feedbackRL']    = ord(substr($parsedFrame['data'], $frame_offset++, 1));
 			$parsedFrame['premixLR']      = ord(substr($parsedFrame['data'], $frame_offset++, 1));
-			$parsedFrame['premixRL']      = ord(substr($parsedFrame['data'], $frame_offset++, 1));
+			$parsedFrame['premixRL']      = ord(substr($parsedFrame['data'], $frame_offset, 1));
 			unset($parsedFrame['data']);
 
 
@@ -1878,7 +1873,6 @@ class getid3_id3v2 extends getid3_handler
 			$rg_track_adjustment = getid3_lib::Dec2Bin(substr($parsedFrame['data'], $frame_offset, 2));
 			$frame_offset += 2;
 			$rg_album_adjustment = getid3_lib::Dec2Bin(substr($parsedFrame['data'], $frame_offset, 2));
-			$frame_offset += 2;
 			$parsedFrame['raw']['track']['name']       = getid3_lib::Bin2Dec(substr($rg_track_adjustment, 0, 3));
 			$parsedFrame['raw']['track']['originator'] = getid3_lib::Bin2Dec(substr($rg_track_adjustment, 3, 3));
 			$parsedFrame['raw']['track']['signbit']    = getid3_lib::Bin2Dec(substr($rg_track_adjustment, 6, 1));
