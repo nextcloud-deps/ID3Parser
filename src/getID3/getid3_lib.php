@@ -116,8 +116,7 @@ class getid3_lib
 			$pointbitstring .= (string) self::trunc($floatpart);
 			$floatpart -= self::trunc($floatpart);
 		}
-		$binarypointnumber = decbin($intpart).'.'.$pointbitstring;
-		return $binarypointnumber;
+		return decbin($intpart).'.'.$pointbitstring;
 	}
 
 
