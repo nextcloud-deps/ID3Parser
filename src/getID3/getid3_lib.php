@@ -116,8 +116,7 @@ class getid3_lib
 			$pointbitstring .= (string) self::trunc($floatpart);
 			$floatpart -= self::trunc($floatpart);
 		}
-		$binarypointnumber = decbin($intpart).'.'.$pointbitstring;
-		return $binarypointnumber;
+		return decbin($intpart).'.'.$pointbitstring;
 	}
 
 
@@ -213,11 +212,6 @@ class getid3_lib
 				$floatvalue = '+infinity';
 			}
 		} elseif (($exponent == 0) && ($fraction == 0)) {
-			if ($signbit == '1') {
-				$floatvalue = -0;
-			} else {
-				$floatvalue = 0;
-			}
 			$floatvalue = ($signbit ? 0 : -0);
 		} elseif (($exponent == 0) && ($fraction != 0)) {
 			// These are 'unnormalized' values
@@ -1107,7 +1101,6 @@ class getid3_lib
 		}
 
 		// Init
-		$keylength  = strlen($key);
 		$line_count = $end - $begin - 7;
 
 		// Open php file
