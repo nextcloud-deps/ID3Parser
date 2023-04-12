@@ -1,7 +1,7 @@
 {
-  "name": "christophwurst/id3parser",
+  "name": "nextcloud/id3parser",
   "description": "An ID3 parser",
-  "homepage" : "https://github.com/ChristophWurst/ID3Parser/",
+  "homepage" : "https://github.com/nextcloud-deps/ID3Parser/",
   "require" : {
     "php" : ">=5.4.0"
   },
